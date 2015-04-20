@@ -1,0 +1,53 @@
+---
+vm_name: msfdev
+vm_os: ubuntu/trusty64
+
+app_name: '{{ vm_name }}'
+user_name: '{{ "vagrant" if target == "virtualbox" else app_name }}'
+group_name: '{{ user_name }}'
+
+user_home_path: '/home/{{ user_name }}'
+
+path: '{{ user_home_path }}/app'
+releases_path: '{{ path }}/releases'
+shared_path: '{{ path }}/shared'
+current_path: '{{ path }}/current'
+
+app_path: '{{ path if target == "virtualbox" else current_path }}'
+app_public_path: '{{ app_path }}/public'
+app_config_path: '{{ app_path }}/config'
+app_temp_path: '{{ app_path }}/tmp'
+app_logs_path: '{{ app_path }}/log'
+
+environment_file: '{{ shared_path }}/.env'
+
+git_branch: development
+git_url: git@github.com:crmaxx/metasploit-framework.git
+
+environments:
+  - production
+
+packages:
+  - nmap
+  - curl
+  - wget
+  - xsel
+  - curl
+  - libcurl3
+  - libcurl3-gnutls
+  - libcurl4-openssl-dev
+
+ruby_install: package
+ruby_user_name: '{{ "root" if ruby_install == "package" else user_name }}'
+ruby_version: ruby2.1
+
+databases:
+  - postgresql
+postgresql_orm: activerecord
+postgresql_db_name: '{{ app_name }}'
+postgresql_db_user: '{{ app_name }}'
+postgresql_db_password: '{{ app_name }}'
+postgresql_extensions:
+  - hstore
+
+use_apt_proxy: false
